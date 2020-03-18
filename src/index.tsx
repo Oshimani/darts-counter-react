@@ -1,8 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import { App } from './App';
 import * as serviceWorker from './serviceWorker';
+import { loadTheme, initializeIcons } from 'office-ui-fabric-react';
+import { BASE_THEME } from "./theme";
+
+// init UI fabric
+loadTheme(BASE_THEME);
+initializeIcons();
+
+// contexts
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
