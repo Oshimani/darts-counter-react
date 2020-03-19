@@ -22,7 +22,8 @@ export const App = () => {
   const s_pageBodyStyles: React.CSSProperties = {
     padding: 4,
     textAlign: 'center',
-    fontSize: FontSizes.xxLarge
+    fontSize: FontSizes.xxLarge,
+    color: getTheme().palette.black
   };
 
   return (
