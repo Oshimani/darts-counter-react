@@ -1,11 +1,11 @@
-import React from 'react'
-import { Text, Stack, StackItem, DefaultButton, PrimaryButton } from "office-ui-fabric-react";
-import { Counter } from '../../components/counter';
+import React, {  } from 'react'
+import { Stack } from "office-ui-fabric-react";
 import { CounterTable } from '../../components/counter-table';
 import { PlayerScore } from '../../components/player-score';
 
-export const Game301 = () => {
-
+export const GameX01 = () => {
+   
+    // mock stuff
     const pco1 = {
         first: {
             value: 20,

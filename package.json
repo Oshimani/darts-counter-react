@@ -14,8 +14,8 @@
     "@uifabric/fluent-theme": "^7.1.40",
     "@uifabric/react-cards": "^0.109.42",
     "office-ui-fabric-react": "^7.104.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "typescript": "^3.7.5"

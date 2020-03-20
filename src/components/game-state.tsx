@@ -1,10 +1,13 @@
 import React from 'react'
 import { App } from '../App'
+import { GameStateContext, useGameState } from '../game-context'
 
 export const GameState = () => {
+    const gameState = useGameState();
+
     return (
-        <div>
+        <GameStateContext.Provider value={gameState}>
             <App />
-        </div>
+        </GameStateContext.Provider>
     )
 }

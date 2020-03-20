@@ -2,7 +2,8 @@ import React from 'react';
 import { Stack, Text, IStackStyles, getTheme, FontSizes } from "office-ui-fabric-react";
 import { Link, BrowserRouter, Switch, Route } from "react-router-dom";
 import { Home } from './home/home';
-import { Game301 } from './games/game_301/game-301';
+import { GameX01 } from './games/game_X01/game-X01';
+import { GameRTC } from './games/game-rtc/game-rtc';
 
 export const App = () => {
 
@@ -31,19 +32,17 @@ export const App = () => {
       <BrowserRouter>
         {/* NAV */}
         <Stack horizontal tokens={{ childrenGap: 12, padding: 4 }} styles={s_navStackStyles}>
-          <Link style={s_navItemStyles} to="/home"><Text variant="xxLarge">Home</Text></Link>
-          <Link style={s_navItemStyles} to="/301"><Text variant="xxLarge">301</Text></Link>
-          <Link style={s_navItemStyles} to="/501"><Text variant="xxLarge">501</Text></Link>
+          <Link style={s_navItemStyles} to="/"><Text variant="xxLarge">Home</Text></Link>
+          <Link style={s_navItemStyles} to="/X01"><Text variant="xxLarge">X01</Text></Link>
           <Link style={s_navItemStyles} to="/roundtheClock"><Text variant="xxLarge">R-t-C</Text></Link>
         </Stack>
 
         {/* BROWSER OUTLET */}
         <div style={s_pageBodyStyles}>
           <Switch >
-            <Route path="/301"><Game301 /></Route>
-            <Route path="/501"></Route>
-            <Route path="/roundtheClock"></Route>
-            <Route path="/home"><Home /></Route>
+            <Route path="/X01"><GameX01 /></Route>
+            <Route path="/roundtheClock"><GameRTC /></Route>
+            <Route path="/"><Home /></Route>
           </Switch>
         </div>
       </BrowserRouter>
