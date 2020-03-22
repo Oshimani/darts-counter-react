@@ -36,8 +36,8 @@ export const GameConfigX01 = () => {
                     </div>
                     <ChoiceGroup selectedKey={checkIn} onChange={(e, value) => { setGameRule_CheckIn(value!.key as CheckOut) }} options={[
                         {
-                            key: CheckOut.Single,
-                            text: 'Single',
+                            key: CheckOut.Straight,
+                            text: 'Straight',
                             iconProps: {
                                 iconName: 'SingleColumn'
                             }
@@ -69,8 +69,8 @@ export const GameConfigX01 = () => {
                     </div>
                     <ChoiceGroup selectedKey={checkOut} onChange={(e, value) => { setGameRule_CheckOut(value!.key as CheckOut) }} options={[
                         {
-                            key: CheckOut.Single,
-                            text: 'Single',
+                            key: CheckOut.Straight,
+                            text: 'Straight',
                             iconProps: {
                                 iconName: 'SingleColumn'
                             }

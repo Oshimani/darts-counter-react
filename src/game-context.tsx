@@ -32,7 +32,7 @@ export const DEFAULT_GAME_STATE: IGameState = {
     startScore: 301,
     setGameRule_StartScore: () => { },
 
-    checkIn: CheckOut.Single,
+    checkIn: CheckOut.Straight,
     setGameRule_CheckIn: () => { },
 
     checkOut: CheckOut.Double,
@@ -63,7 +63,7 @@ export const useGameState = (): IGameState => {
     }, []);
 
     //check in
-    const [checkIn, setCheckIn] = useState(CheckOut.Single);
+    const [checkIn, setCheckIn] = useState(CheckOut.Straight);
     const setGameRule_CheckIn = useCallback((variant: CheckOut): void => {
         console.log(`[GAMESTATE] CheckIn => ${variant}`);
         setCheckIn(variant);

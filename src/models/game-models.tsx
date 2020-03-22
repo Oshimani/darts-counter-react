@@ -5,7 +5,7 @@ export interface IPlayer {
 }
 
 export enum CheckOut {
-    Single = 'single',
+    Straight = 'straight',
     Double = 'double',
     Triple = 'triple'
 }
