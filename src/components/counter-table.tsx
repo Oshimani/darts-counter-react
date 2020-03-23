@@ -1,35 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Counter } from './counter'
-import { DefaultButton, Text } from 'office-ui-fabric-react'
+import { Text } from 'office-ui-fabric-react'
+import { GameStateContext } from '../game-context';
+
+const POSSIBLE_SCORES: Array<number | 'Bull' | 'Miss'> = ['Bull', 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 'Miss'];
 
 export const CounterTable = () => {
+    const { currentPlayer } = useContext(GameStateContext);
+
+    const scoreClicked = (score: number, multiplier: number) => {
+        console.log(`Event bubbled to me! ${score} ${multiplier}`);
+
+    };
+
     return (
         <div>
-            <Text variant="xxLarge">Counter Table</Text>
-            <Counter value="Bull"></Counter>
-            <Counter value={20}></Counter>
-            <Counter value={19}></Counter>
-            <Counter value={18}></Counter>
-            <Counter value={17}></Counter>
-            <Counter value={16}></Counter>
-            <Counter value={15}></Counter>
-            <Counter value={14}></Counter>
-            <Counter value={13}></Counter>
-            <Counter value={12}></Counter>
-            <Counter value={11}></Counter>
-            <Counter value={10}></Counter>
-            <Counter value={9}></Counter>
-            <Counter value={8}></Counter>
-            <Counter value={7}></Counter>
-            <Counter value={6}></Counter>
-            <Counter value={5}></Counter>
-            <Counter value={4}></Counter>
-            <Counter value={3}></Counter>
-            <Counter value={2}></Counter>
-            <Counter value={1}></Counter>
-            <div style={{ margin: 2 }}>
-                <DefaultButton style={{ width: '75%', float: "right" }}>Miss</DefaultButton>
-            </div>
-        </div>
+            <Text variant="xxLarge">{currentPlayer.name}'s turn</Text>
+            {POSSIBLE_SCORES.map((score: number | 'Bull' | 'Miss') => {
+                return (
+                    <Counter key={score} onScoreClicked={(score: number, multiplier: number) => { scoreClicked(score, multiplier) }} value={score}></Counter>
+                )
+            })
+            }
+        </div >
     )
 }

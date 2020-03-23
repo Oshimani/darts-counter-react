@@ -18,11 +18,17 @@ export interface IGameState {
     checkOut: CheckOut;
     setGameRule_CheckOut: (variant: CheckOut) => void;
 
+    numberOfLegs: number;
+    setGameRule_NumberOfLegs: (count: number) => void;
 
     // players
     players: Array<IPlayer>;
     addPlayer: (newPlayer: IPlayer) => void;
     removePlayer: (id: number) => void;
+
+    // game state
+    currentPlayer: IPlayer,
+    setGameState_NextPlayer: () => void;
 }
 
 export const DEFAULT_GAME_STATE: IGameState = {
@@ -38,48 +44,64 @@ export const DEFAULT_GAME_STATE: IGameState = {
     checkOut: CheckOut.Double,
     setGameRule_CheckOut: () => { },
 
+    numberOfLegs: 1,
+    setGameRule_NumberOfLegs: () => { },
+
     players: new Array<IPlayer>(),
     addPlayer: () => { },
     removePlayer: () => { },
+
+    currentPlayer: {} as IPlayer,
+    setGameState_NextPlayer: () => { }
 }
 
 export const GameStateContext = createContext<IGameState>(DEFAULT_GAME_STATE);
 
 export const useGameState = (): IGameState => {
     // game mode
-    const [gameMode, setGameMode] = useState(GameMode.X01);
+    const [gameMode, setGameMode] = useState<GameMode>(GameMode.X01);
     const setGameRule_Mode = useCallback((gameMode: GameMode): void => {
-        console.log(`[GAMESTATE] Current game mode => ${gameMode}`);
+        console.log(`[GAMESETTING] Current game mode => ${gameMode}`);
         setGameMode(gameMode);
     }, [])
 
     // game settings
 
     // start score
-    const [startScore, setStartScore] = useState(301);
+    const [startScore, setStartScore] = useState<number>(301);
     const setGameRule_StartScore = useCallback((startScore: number): void => {
-        console.log(`[GAMESTATE] StartScore => ${startScore}`);
+        console.log(`[GAMESETTING] StartScore => ${startScore}`);
         setStartScore(startScore);
     }, []);
 
     //check in
-    const [checkIn, setCheckIn] = useState(CheckOut.Straight);
+    const [checkIn, setCheckIn] = useState<CheckOut>(CheckOut.Straight);
     const setGameRule_CheckIn = useCallback((variant: CheckOut): void => {
-        console.log(`[GAMESTATE] CheckIn => ${variant}`);
+        console.log(`[GAMESETTING] CheckIn => ${variant}`);
         setCheckIn(variant);
     }, []);
 
     //check out
-    const [checkOut, setCheckOut] = useState(CheckOut.Double);
+    const [checkOut, setCheckOut] = useState<CheckOut>(CheckOut.Double);
     const setGameRule_CheckOut = useCallback((variant: CheckOut): void => {
-        console.log(`[GAMESTATE] CheckOut => ${variant}`);
+        console.log(`[GAMESETTING] CheckOut => ${variant}`);
         setCheckOut(variant);
-    }, [])
+    }, []);
+
+    // number of legs
+    const [numberOfLegs, setNumberOfLegs] = useState<number>(1);
+    const setGameRule_NumberOfLegs = useCallback((count: number): void => {
+        console.log(`[GAMESETTING] Number of legs => ${count}`);
+        setNumberOfLegs(count);
+    }, []);
 
     // players
-    const [players, setPlayers] = useState(new Array<IPlayer>());
+    const [players, setPlayers] = useState([
+        { name: 'Player 1', id: Number(Math.random().toFixed(7).substring(2, 8)) } as IPlayer,
+        { name: 'Player 2', id: Number(Math.random().toFixed(7).substring(2, 8)) } as IPlayer
+    ]);
 
-    // add
+    // add player
     const addPlayer = useCallback(
         (newPlayer: IPlayer): void => {
             console.log(`[GAMESTATE] Player added => ${newPlayer.name}`);
@@ -89,14 +111,34 @@ export const useGameState = (): IGameState => {
             setPlayers([...players, newPlayer]);
         }, [players]);
 
-    // remove
+    // remove player
     const removePlayer = useCallback(
         (id: number) => {
             console.log(`[GAMESTATE] Player removed => ${id}`);
             setPlayers(players.filter((player: IPlayer) => player.id !== id));
         },
-        [players],
-    )
+        [players]);
+
+    // game state
+
+    // set current player
+    const [currentPlayer, setCurrentPlayer] = useState<IPlayer>({} as IPlayer);
+    // const setGameState_CurrentPlayer = useCallback((player: IPlayer): void => {
+    //     console.log(`[GAMESTATE] Current player => (${player.id}) ${player.name}`);
+    //     setCurrentPlayer(player);
+    // }, []);
+
+    const setGameState_NextPlayer = useCallback((): void => {
+        let nextPlayerIndex: number = 0;
+        for (let index = 0; index < players.length; index++) {
+            const player = players[index];
+            if (player.id === currentPlayer.id)
+                if (index + 1 < players.length) nextPlayerIndex = index + 1;
+            //  else: its fist players turn again
+        }
+        setCurrentPlayer(players[nextPlayerIndex]);
+
+    }, [players, currentPlayer]);
 
     return {
         gameMode,
@@ -111,6 +153,12 @@ export const useGameState = (): IGameState => {
 
         checkOut,
         setGameRule_CheckOut,
+
+        numberOfLegs,
+        setGameRule_NumberOfLegs,
+
+        currentPlayer,
+        setGameState_NextPlayer,
 
         // players
         players,

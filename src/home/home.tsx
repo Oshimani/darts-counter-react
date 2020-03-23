@@ -1,17 +1,21 @@
 import React, { useContext, useState, createRef } from 'react'
-import { Icon, Text, FontSizes, ChoiceGroup, getTheme, TextField, Stack, IconButton } from 'office-ui-fabric-react'
+import { Text, ChoiceGroup, getTheme, TextField, Stack, IconButton, PrimaryButton, Link } from 'office-ui-fabric-react'
 import { GameStateContext } from '../game-context';
 import { GameMode } from '../games/game-mode';
 import { GameConfigX01 } from '../games/game_X01/game-config-X01';
 import { GameConfigRTC } from '../games/game-rtc/game-config-rtc';
 import { IPlayer } from '../models/game-models';
+import { useHistory } from 'react-router-dom';
 
 export const Home = () => {
     const { players, addPlayer, removePlayer,
-        gameMode, setGameRule_Mode } = useContext(GameStateContext);
+        gameMode, setGameRule_Mode,
+        checkIn, checkOut, numberOfLegs, startScore,
+        setGameState_NextPlayer } = useContext(GameStateContext);
     const [newPlayerName, setNewPlayerName] = useState<string>('');
 
     const newPlayerComponentRef = createRef<any>();
+    const history = useHistory();
 
     const gameModeSelected = (option: GameMode): void => {
         setGameRule_Mode(option);
@@ -33,6 +37,34 @@ export const Home = () => {
         const code = (event.keyCode ? event.keyCode : event.which)
         if (code === 13)
             addNewPlayer();
+    }
+
+    const allowGameStart = (): boolean => {
+        if (players.length > 0
+            && gameMode
+            && checkIn
+            && checkOut
+            && numberOfLegs
+            && startScore) return true;
+        return false;
+    }
+
+    const startGame = (): void => {
+
+        // init game
+        setGameState_NextPlayer();
+
+
+        // init player stats
+        for (const player of players) {
+            player.score = startScore;
+            player.dartsThrown = 0;
+            player.average = 0;
+            player.possibleCheckOut = null;
+        }
+
+        // navigate to game page
+        history.push('/' + gameMode)
     }
 
     //#region STYLES 
@@ -136,6 +168,14 @@ export const Home = () => {
             {gameMode === GameMode.RoundTheClock &&
                 <GameConfigRTC></GameConfigRTC>
             }
-        </div>
+
+            {/* START GAME */}
+            <div style={s_headerStyles}>
+                <Text variant="xLarge">Start game:</Text>
+            </div>
+            <div>
+                <PrimaryButton disabled={!allowGameStart()} style={{ width: '100%' }} onClick={() => { startGame() }}>Start</PrimaryButton>
+            </div>
+        </div >
     )
 }

@@ -1,50 +1,35 @@
-import React, {  } from 'react'
+import React, { useContext } from 'react'
 import { Stack } from "office-ui-fabric-react";
 import { CounterTable } from '../../components/counter-table';
 import { PlayerScore } from '../../components/player-score';
+import { GameStateContext } from '../../game-context';
+import { IPlayer } from '../../models/game-models';
 
 export const GameX01 = () => {
-   
-    // mock stuff
-    const pco1 = {
-        first: {
-            value: 20,
-            multiplier: 3
-        },
-        second: {
-            value: 20,
-            multiplier: 3
-        },
-        third: {
-            value: 2,
-            multiplier: 2
-        }
-    }
-    const pco2 = {
-        first: {
-            value: 20,
-            multiplier: 3
-        },
-        second: {
-            value: 18,
-            multiplier: 2
-        }
-    }
+
+    const { players } = useContext(GameStateContext)
+
 
     return (
-        <div>
-            <div style={{ width: '66.66%', float: 'left' }}>
-                <Stack horizontal wrap tokens={{ childrenGap: 12 }} verticalFill>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
+            <div>
+                <Stack horizontal wrap tokens={{ childrenGap: 12 }} >
 
-                    <PlayerScore name="Jannick" currentlyPlaying={true} score={201} averageScore={40.1} dartsThrown={15} possibleCheckout={pco1} ></PlayerScore>
-                    <PlayerScore name="Felix Kai Zwetsch" currentlyPlaying={false} score={21} averageScore={40.1} dartsThrown={15} ></PlayerScore>
-
-                    <PlayerScore name="Christoph Dörr" currentlyPlaying={false} score={155} averageScore={40.1} dartsThrown={15} possibleCheckout={pco2} ></PlayerScore>
-                    <PlayerScore name="Christoph Johannes Gutenberg" currentlyPlaying={true} score={155} averageScore={40.1} dartsThrown={15} ></PlayerScore>
-                    <PlayerScore name="Christoph" currentlyPlaying={false} score={155} averageScore={40.1} dartsThrown={15} ></PlayerScore>
+                    {
+                        players.map((player: IPlayer) => {
+                            return (
+                                <PlayerScore currentlyPlaying={false}
+                                    key={player.id}
+                                    name={player.name}
+                                    score={player.score}
+                                    averageScore={player.average}
+                                    dartsThrown={player.dartsThrown} />
+                            )
+                        })
+                    }
                 </Stack>
             </div>
-            <div style={{ width: '33.33%', float: "right" }}>
+            <div>
                 <CounterTable></CounterTable>
             </div>
         </div>

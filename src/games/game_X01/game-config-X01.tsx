@@ -1,12 +1,13 @@
-import React, { useState, useContext } from 'react'
-import { Text, Slider, ChoiceGroup, getTheme } from "office-ui-fabric-react";
+import React, { useContext } from 'react'
+import { Text, Slider, ChoiceGroup, getTheme, SpinButton } from "office-ui-fabric-react";
 import { CheckOut } from '../../models/game-models';
 import { GameStateContext } from '../../game-context';
 
 export const GameConfigX01 = () => {
     const { startScore, setGameRule_StartScore,
         checkIn, setGameRule_CheckIn,
-        checkOut, setGameRule_CheckOut } = useContext(GameStateContext);
+        checkOut, setGameRule_CheckOut,
+        numberOfLegs, setGameRule_NumberOfLegs } = useContext(GameStateContext);
 
     //#region Styles
     const s_headerStyles: React.CSSProperties = {
@@ -29,7 +30,7 @@ export const GameConfigX01 = () => {
                         onChange={(value) => { setGameRule_StartScore(value) }} />
                 </div>
 
-                {/* ChecKIn */}
+                {/* CHECK IN */}
                 <div>
                     <div style={{ marginBottom: 4 }}>
                         <Text variant="large" style={s_headerStyles}>Checkin:</Text>
@@ -59,10 +60,18 @@ export const GameConfigX01 = () => {
                     ]}></ChoiceGroup>
                 </div>
 
-                {/* SPACER */}
-                <div></div>
+                {/* LEGS */}
+                <div>
+                    <div style={{ marginBottom: 4 }}>
+                        <Text variant="large" style={s_headerStyles}>Legs (first to x):</Text>
+                    </div>
+                    <SpinButton min={1} step={1}
+                        value={String(numberOfLegs)}
+                        onIncrement={(value: string) => { setGameRule_NumberOfLegs(Number(value) + 1) }}
+                        onDecrement={(value: string) => { setGameRule_NumberOfLegs(Number(value) - 1) }} />
+                </div>
 
-                {/* CheckOut */}
+                {/* CHECK OUT */}
                 <div>
                     <div style={{ marginBottom: 4 }}>
                         <Text variant="large" style={s_headerStyles}>Checkout:</Text>
@@ -91,6 +100,7 @@ export const GameConfigX01 = () => {
                         },
                     ]}></ChoiceGroup>
                 </div>
+
             </div>
         </div>
     )
