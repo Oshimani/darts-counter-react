@@ -27,7 +27,7 @@ export interface IGameState {
     removePlayer: (id: number) => void;
 
     // game state
-    currentPlayer: IPlayer,
+    currentPlayerIndex: number;
     setGameState_NextPlayer: () => void;
 }
 
@@ -51,7 +51,7 @@ export const DEFAULT_GAME_STATE: IGameState = {
     addPlayer: () => { },
     removePlayer: () => { },
 
-    currentPlayer: {} as IPlayer,
+    currentPlayerIndex: -1,
     setGameState_NextPlayer: () => { }
 }
 
@@ -65,6 +65,7 @@ export const useGameState = (): IGameState => {
         setGameMode(gameMode);
     }, [])
 
+    //#region GAME SETTINGS
     // game settings
 
     // start score
@@ -95,6 +96,8 @@ export const useGameState = (): IGameState => {
         setNumberOfLegs(count);
     }, []);
 
+    //#endregion
+
     // players
     const [players, setPlayers] = useState([
         { name: 'Player 1', id: Number(Math.random().toFixed(7).substring(2, 8)) } as IPlayer,
@@ -121,24 +124,13 @@ export const useGameState = (): IGameState => {
 
     // game state
 
-    // set current player
-    const [currentPlayer, setCurrentPlayer] = useState<IPlayer>({} as IPlayer);
-    // const setGameState_CurrentPlayer = useCallback((player: IPlayer): void => {
-    //     console.log(`[GAMESTATE] Current player => (${player.id}) ${player.name}`);
-    //     setCurrentPlayer(player);
-    // }, []);
-
+    // current player
+    const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number>(-1);
     const setGameState_NextPlayer = useCallback((): void => {
-        let nextPlayerIndex: number = 0;
-        for (let index = 0; index < players.length; index++) {
-            const player = players[index];
-            if (player.id === currentPlayer.id)
-                if (index + 1 < players.length) nextPlayerIndex = index + 1;
-            //  else: its fist players turn again
-        }
-        setCurrentPlayer(players[nextPlayerIndex]);
-
-    }, [players, currentPlayer]);
+        const nextPlayerIndex: number = currentPlayerIndex + 1 < players.length ? currentPlayerIndex + 1 : 0;
+        setCurrentPlayerIndex(nextPlayerIndex);
+        console.log(`[GAMESTATE] Current player is now => ${players[nextPlayerIndex]?.name}`);
+    }, [players, currentPlayerIndex]);
 
     return {
         gameMode,
@@ -157,12 +149,13 @@ export const useGameState = (): IGameState => {
         numberOfLegs,
         setGameRule_NumberOfLegs,
 
-        currentPlayer,
-        setGameState_NextPlayer,
-
         // players
         players,
         addPlayer,
-        removePlayer
+        removePlayer,
+
+        // game state
+        currentPlayerIndex,
+        setGameState_NextPlayer,
     };
 }

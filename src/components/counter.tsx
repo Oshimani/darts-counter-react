@@ -4,17 +4,13 @@ import { DefaultButton, PrimaryButton, Text } from "office-ui-fabric-react";
 export const Counter = (props: { value: number | 'Bull' | 'Miss', onScoreClicked: Function }) => {
 
     const clickedButton = (value: number | 'Bull' | 'Miss', multiplier: 1 | 2 | 3) => {
-        let score: number = 0;
-
         if (value === 'Bull')
-            score = 25 * multiplier;
+            value = 25;
         else if (value === 'Miss')
-            score = 0;
-        else score = value * multiplier;
-        console.log(score);
+            value = 0;
 
         // bubble to score table
-        props.onScoreClicked(score, multiplier);
+        props.onScoreClicked(value, multiplier);
     }
 
 
