@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Text, Persona, Icon, Stack, getTheme } from "office-ui-fabric-react";
 import { Card } from "@uifabric/react-cards";
 import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
+import { GameStateContext } from '../game-context';
 
 export const PlayerScore = (props: {
     name: string,
@@ -25,6 +26,15 @@ export const PlayerScore = (props: {
     }
 }) => {
 
+    const { currentPlayerIndex, players } = useContext(GameStateContext);
+    const [isActivePlayer, setIsActivePlayer] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (players[currentPlayerIndex].name === props.name)
+            setIsActivePlayer(true);
+        else setIsActivePlayer(false);
+    }, [currentPlayerIndex])
+
     const s_possibleCheckoutStyles: React.CSSProperties = {
         boxShadow: Depths.depth8,
         paddingTop: 8,
@@ -34,15 +44,22 @@ export const PlayerScore = (props: {
         width: '33.33%'
     };
 
-
-
-
     return (
         <div>
-            <Card tokens={{ childrenMargin: 12, padding: 4 }} styles={{ root: { backgroundColor: getTheme().palette.white, height: '100%' } }}>
+            <Card tokens={{ childrenMargin: 12, padding: 4 }} styles={{
+                root: {
+                    backgroundColor: isActivePlayer ? getTheme().palette.themePrimary : getTheme().palette.white,
+                    height: '100%',
+                    color: isActivePlayer ? getTheme().palette.white : getTheme().palette.black
+                },
+
+            }}>
                 <Card.Item>
                     <Stack horizontal verticalAlign="baseline">
-                        <Persona text={props.name} secondaryText={`Thrown: ${props.dartsThrown}`} />
+                        <Persona text={props.name} secondaryText={`Thrown: ${props.dartsThrown}`} styles={{
+                            primaryText: { color: isActivePlayer ? getTheme().palette.white : getTheme().palette.black },
+                            secondaryText: { color: isActivePlayer ? getTheme().palette.white : getTheme().palette.black }
+                        }} />
                         {/* SPACER */}
                         <Stack.Item grow={1}><span></span></Stack.Item>
                         <Icon iconName="Edit"></Icon>
@@ -70,6 +87,6 @@ export const PlayerScore = (props: {
                     }
                 </Card.Section>
             </Card>
-        </div>
+        </div >
     )
 }
