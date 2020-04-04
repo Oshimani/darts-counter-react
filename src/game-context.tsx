@@ -29,6 +29,10 @@ export interface IGameState {
     // game state
     currentPlayerIndex: number;
     setGameState_NextPlayer: () => void;
+
+    // current player's turn
+    currentDart: 1 | 2 | 3;
+    setgameState_NextDart: () => void;
 }
 
 export const DEFAULT_GAME_STATE: IGameState = {
@@ -52,7 +56,10 @@ export const DEFAULT_GAME_STATE: IGameState = {
     removePlayer: () => { },
 
     currentPlayerIndex: -1,
-    setGameState_NextPlayer: () => { }
+    setGameState_NextPlayer: () => { },
+
+    currentDart: 1,
+    setgameState_NextDart: () => { }
 }
 
 export const GameStateContext = createContext<IGameState>(DEFAULT_GAME_STATE);
@@ -98,6 +105,7 @@ export const useGameState = (): IGameState => {
 
     //#endregion
 
+    //#region PLAYERS
     // players
     const [players, setPlayers] = useState([
         { name: 'Player 1', id: Number(Math.random().toFixed(7).substring(2, 8)) } as IPlayer,
@@ -121,6 +129,7 @@ export const useGameState = (): IGameState => {
             setPlayers(players.filter((player: IPlayer) => player.id !== id));
         },
         [players]);
+    //#endregion
 
     // game state
 
@@ -131,6 +140,16 @@ export const useGameState = (): IGameState => {
         setCurrentPlayerIndex(nextPlayerIndex);
         console.log(`[GAMESTATE] Current player is now => ${players[nextPlayerIndex]?.name}`);
     }, [players, currentPlayerIndex]);
+
+    // current dart
+    const [currentDart, setCurrentDart] = useState<1 | 2 | 3>(1);
+    const setgameState_CurrentDart = useCallback((): void => {
+        if (currentDart === 3) setCurrentDart(1);
+        else setCurrentDart((currentDart + 1) as 1 | 2 | 3);
+        console.log(`[GAMESTATE] Current dart is now => ${currentDart}`);
+        
+    }, [currentDart]);
+
 
     return {
         gameMode,
@@ -157,5 +176,8 @@ export const useGameState = (): IGameState => {
         // game state
         currentPlayerIndex,
         setGameState_NextPlayer,
+
+        currentDart,
+        setgameState_NextDart: setgameState_CurrentDart
     };
 }
